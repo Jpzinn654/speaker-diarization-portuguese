@@ -6,14 +6,17 @@ from pyannote.core import Segment
 
 class whisperTranscriber():
 
-    def __init__(self):
+    def __init__(self, first_speaker=0):
         self.device = "cpu"
         self.audio = r"your_audio_path_here" 
-        self.batch_size = 1  # reduz se a memória da GPU for baixa
-        self.compute = "float32"  # mude para "int8" se a memória da GPU for baixa (pode reduzir a precisão)
+        self.batch_size = 1
+        self.compute = "float32"
         self.model = whisperx.load_model("base", self.device, compute_type=self.compute, language='pt')
 
         self.diarization = SpeakerDiarization.from_pretrained("pyannote/speaker-diarization-3.1")
+
+        # Ajuste do dicionário de locutores com base no valor de first_speaker
+        self.speaker_dict = {0: "Homem" if first_speaker == 0 else "Mulher", 1: "Mulher" if first_speaker == 1 else "Homem"}
 
     def transcriber(self):
         start_time = time.time()
@@ -38,9 +41,6 @@ class whisperTranscriber():
                 'speaker': speaker
             })
 
-        # Mapeamento de locutores para "homem" e "mulher"
-        speaker_dict = {0: "Homem", 1: "Mulher"}
-
         # Agora, ajustamos sua transcrição para incluir o locutor
         speaker_transcription = []
         for segment in result['segments']:
@@ -55,9 +55,14 @@ class whisperTranscriber():
                     break
             
             if speaker_label is not None:
-                speaker_number = int(speaker_label.split('_')[1])
+                speaker_number = int(speaker_label.split('_')[1]) if "_" in speaker_label else None
 
-                mapped_speaker = speaker_dict.get(speaker_number, "desconhecido")
+                # Verifica se o speaker_number é válido
+                if speaker_number is not None:
+                    mapped_speaker = self.speaker_dict.get(speaker_number, "desconhecido")
+                else:
+                    mapped_speaker = "desconhecido"
+                    
                 speaker_transcription.append({
                     'speaker': f'{mapped_speaker}', 
                     'start': entry_start,
@@ -65,14 +70,10 @@ class whisperTranscriber():
                     'text': segment['text']
                 })
 
-        for item in speaker_transcription:
-            print(f"{item['speaker']} disse: '{item['text']}'")
-
         end_time = time.time()  
         elapsed_time = end_time - start_time  
         print(f"Tempo total de transcrição: {elapsed_time:.2f} segundos")
 
-        return result
-
-if __name__ == '__main__':
-    whisperTranscriber('hf_token_api').transcriber()
+        return {
+            "segments": speaker_transcription
+        }

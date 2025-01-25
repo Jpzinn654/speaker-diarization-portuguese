@@ -30,8 +30,9 @@ def upload_audio():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
 
+    first_speaker = request.form.get('firstSpeaker')
     try:
-        transcriber = whisperTranscriber()
+        transcriber = whisperTranscriber(first_speaker=int(first_speaker)) 
         transcriber.audio = filepath
         result = transcriber.transcriber() 
 

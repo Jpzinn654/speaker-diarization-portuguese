@@ -3,17 +3,18 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
 
     const formData = new FormData();
     const audioFile = document.getElementById('audioFile').files[0];
-    const firstSpeaker = document.getElementById('firstSpeaker').value;
+    const firstSpeaker = document.getElementById('firstSpeaker').value; // Captura o valor selecionado
 
-    if (!audioFile || !firstSpeaker) {
+    if (!audioFile || firstSpeaker === "") {
         alert('Por favor, preencha todos os campos!');
         return;
     }
 
     formData.append('file', audioFile);
-    formData.append('firstSpeaker', firstSpeaker);
+    formData.append('firstSpeaker', firstSpeaker); // Envia o valor do primeiro locutor
 
     try {
+        // Envia o formulário via POST para o Flask
         const response = await fetch('http://127.0.0.1:5000/upload', {
             method: 'POST',
             body: formData
