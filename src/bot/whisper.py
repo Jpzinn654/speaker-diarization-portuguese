@@ -6,12 +6,11 @@ from pyannote.core import Segment
 
 class whisperTranscriber():
 
-    def __init__(self, hf_token_api):
+    def __init__(self):
         self.device = "cpu"
         self.audio = r"your_audio_path_here" 
         self.batch_size = 1  # reduz se a memória da GPU for baixa
         self.compute = "float32"  # mude para "int8" se a memória da GPU for baixa (pode reduzir a precisão)
-        self.hf_token_api = hf_token_api
         self.model = whisperx.load_model("base", self.device, compute_type=self.compute, language='pt')
 
         self.diarization = SpeakerDiarization.from_pretrained("pyannote/speaker-diarization-3.1")
