@@ -4,6 +4,14 @@
 
 This project implements **speaker diarization** for Portuguese-language audio files, using **WhisperX** for transcription and **Speaker-Diarization 3.1** from **PyAnotAudio** for identifying and separating speakers. The project also includes a **Flask UI**, which allows users to easily upload audio files, perform transcription, and view speaker diarization results. Additionally, it automatically detects the gender of the speakers (Male or Female).
 
+## Interface Screenshots
+
+### UI without Transcription
+![image](https://github.com/user-attachments/assets/6718624b-bf2c-48c8-9883-94e7f4b52a32)
+
+### UI with Transcription
+![image](https://github.com/user-attachments/assets/56e38836-116d-4b0e-b7e8-23cad26ad463)
+
 ## Features
 
 - **Audio Transcription**: Utilizes WhisperX for high-quality transcription of Portuguese audio.
