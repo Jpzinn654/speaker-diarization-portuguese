@@ -10,6 +10,12 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
         return;
     }
 
+    // Mostra o spinner e desabilita a interação
+    document.getElementById('spinner').classList.remove('hidden'); // Mostra o spinner
+    document.getElementById('uploadForm').querySelector('button').disabled = true; // Desabilita o botão
+    document.getElementById('audioFile').disabled = true; // Desabilita o input de arquivo
+    document.getElementById('firstSpeaker').disabled = true; // Desabilita o seletor do locutor
+
     formData.append('file', audioFile);
     formData.append('firstSpeaker', firstSpeaker); // Envia o valor do primeiro locutor
 
@@ -26,12 +32,28 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
             // Preenche a área de transcrição com a resposta da transcrição e diarização
             const transcriptionArea = document.getElementById('transcription');
             transcriptionArea.value = formatTranscription(result);
+
+            // Esconde o spinner e reabilita a interação
+            document.getElementById('spinner').classList.add('hidden'); // Esconde o spinner
+            document.getElementById('uploadForm').querySelector('button').disabled = false; // Habilita o botão
+            document.getElementById('audioFile').disabled = false; // Habilita o input de arquivo
+            document.getElementById('firstSpeaker').disabled = false; // Habilita o seletor do locutor
         } else {
             alert('Erro ao processar o áudio: ' + result.error);
+            // Esconde o spinner e reabilita a interação em caso de erro
+            document.getElementById('spinner').classList.add('hidden');
+            document.getElementById('uploadForm').querySelector('button').disabled = false;
+            document.getElementById('audioFile').disabled = false;
+            document.getElementById('firstSpeaker').disabled = false;
         }
     } catch (error) {
         console.error('Erro ao enviar áudio:', error);
         alert('Erro ao enviar áudio');
+        // Esconde o spinner e reabilita a interação em caso de erro
+        document.getElementById('spinner').classList.add('hidden');
+        document.getElementById('uploadForm').querySelector('button').disabled = false;
+        document.getElementById('audioFile').disabled = false;
+        document.getElementById('firstSpeaker').disabled = false;
     }
 });
 
