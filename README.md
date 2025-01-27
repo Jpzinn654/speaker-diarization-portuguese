@@ -25,8 +25,8 @@ To set up the project locally, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/portuguese-speaker-diarization.git
-    cd portuguese-speaker-diarization
+    git clone https://github.com/Jpzinn654/speaker-diarization-portuguese
+    cd speaker-diarization-portuguese
     ```
 
 2. Install the required dependencies:
